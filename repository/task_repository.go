@@ -1,63 +1,44 @@
 package repository
 
 import (
-	"errors"
-	"sync"
 	"task-manager/models"
+
+	"gorm.io/gorm"
 )
 
 type TaskRepository struct {
-	tasks  map[int]models.Task
-	mu     sync.Mutex
-	nextID int
+	db *gorm.DB
 }
 
-func NewTaskRepository() *TaskRepository {
-	return &TaskRepository{
-		tasks:  make(map[int]models.Task),
-		nextID: 1,
-	}
+func NewTaskRepository(db *gorm.DB) *TaskRepository {
+	return &TaskRepository{db: db}
 }
 
 func (r *TaskRepository) Create(task models.Task) models.Task {
-	r.mu.Lock()
-	defer r.mu.Unlock()
-
-	task.ID = r.nextID
-	r.nextID++
-	r.tasks[task.ID] = task
+	r.db.Create(&task)
 	return task
 }
 
 func (r *TaskRepository) GetAll() []models.Task {
-	r.mu.Lock()
-	defer r.mu.Unlock()
-
-	taskList := make([]models.Task, 0, len(r.tasks))
-	for _, t := range r.tasks {
-		taskList = append(taskList, t)
-	}
-	return taskList
+	var tasks []models.Task
+	r.db.Find(&tasks)
+	return tasks
 }
 
 func (r *TaskRepository) GetByID(id int) (models.Task, error) {
-	r.mu.Lock()
-	defer r.mu.Unlock()
-
-	task, exists := r.tasks[id]
-	if !exists {
-		return models.Task{}, errors.New("task not found")
+	var task models.Task
+	result := r.db.First(&task, id)
+	if result.Error != nil {
+		return models.Task{}, result.Error
 	}
 	return task, nil
 }
 
 func (r *TaskRepository) Update(id int, updatedTask models.Task) (models.Task, error) {
-	r.mu.Lock()
-	defer r.mu.Unlock()
-
-	task, exists := r.tasks[id]
-	if !exists {
-		return models.Task{}, errors.New("task not found")
+	var task models.Task
+	result := r.db.First(&task, id)
+	if result.Error != nil {
+		return models.Task{}, result.Error
 	}
 
 	task.Title = updatedTask.Title
@@ -66,17 +47,14 @@ func (r *TaskRepository) Update(id int, updatedTask models.Task) (models.Task, e
 	task.DueDate = updatedTask.DueDate
 	task.UpdatedAt = updatedTask.UpdatedAt
 
-	r.tasks[id] = task
+	r.db.Save(&task)
 	return task, nil
 }
 
 func (r *TaskRepository) Delete(id int) error {
-	r.mu.Lock()
-	defer r.mu.Unlock()
-
-	if _, exists := r.tasks[id]; !exists {
-		return errors.New("task not found")
+	result := r.db.Delete(&models.Task{}, id)
+	if result.RowsAffected == 0 {
+		return gorm.ErrRecordNotFound
 	}
-	delete(r.tasks, id)
-	return nil
+	return result.Error
 }

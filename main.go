@@ -9,6 +9,7 @@ package main
 import(
 	"github.com/gin-gonic/gin"
 
+	"task-manager/config"
 	"task-manager/controller"
 	"task-manager/repository"
 	"task-manager/routes"
@@ -30,7 +31,9 @@ func main(){
 		AllowHeaders: []string{"Origin", "Content-Type"},
 	}))
 
-	repo := repository.NewTaskRepository()
+	db := config.InitDB()
+
+	repo := repository.NewTaskRepository(db)
 	service := service.NewTaskService(repo)
 	controller := controller.NewTaskController(service)
 
