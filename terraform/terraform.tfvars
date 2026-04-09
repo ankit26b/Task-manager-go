@@ -1,4 +1,5 @@
-aws_region    = "us-east-1"
+aws_region    = "ap-south-1"
+ami_id        = "ami-0736ad6363e77ba3b"
 app_name      = "task-manager-go"
-instance_type = "t2.micro"
+instance_type = "t3.micro"
 environment   = "dev"

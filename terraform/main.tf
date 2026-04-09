@@ -63,7 +63,17 @@ resource "aws_instance" "task_manager" {
               #!/bin/bash
               sudo yum update -y
               sudo yum install -y golang git
-              echo "Task Manager Go server ready to deploy"
+
+              # Clone the project
+              cd /home/ec2-user
+              git clone https://github.com/ankit26b/Task-manager-go.git
+              cd Task-manager-go
+
+              # Build the Go app
+              go build -o task-manager .
+
+              # Run the app in the background on port 8080
+              nohup ./task-manager &
               EOF
 
   tags = {

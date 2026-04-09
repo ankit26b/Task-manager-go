@@ -1,7 +1,7 @@
 variable "aws_region" {
   description = "AWS region to deploy resources"
   type        = string
-  default     = "us-east-1"
+  default     = "ap-south-1"
 }
 
 variable "app_name" {
@@ -13,13 +13,13 @@ variable "app_name" {
 variable "instance_type" {
   description = "EC2 instance type"
   type        = string
-  default     = "t2.micro"
+  default     = "t3.micro"
 }
 
 variable "ami_id" {
-  description = "AMI ID for the EC2 instance (Amazon Linux 2)"
+  description = "AMI ID for the EC2 instance (Amazon Linux 2 - ap-south-1)"
   type        = string
-  default     = "ami-0c02fb55956c7d316"
+  default     = "ami-0736ad6363e77ba3b"
 }
 
 variable "environment" {
