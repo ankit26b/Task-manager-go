@@ -1,4 +1,5 @@
 aws_region  = "us-east-1"
+aws_profile = "default"
 environment = "prod"
 project     = "task-manager"
 owner       = "platform-team"

@@ -4,6 +4,33 @@ variable "aws_region" {
   default     = "us-east-1"
 }
 
+variable "aws_profile" {
+  description = "Optional AWS CLI profile name (preferred for local usage)"
+  type        = string
+  default     = null
+}
+
+variable "aws_access_key_id" {
+  description = "Optional AWS access key id (prefer environment variables in CI/CD)"
+  type        = string
+  sensitive   = true
+  default     = null
+}
+
+variable "aws_secret_access_key" {
+  description = "Optional AWS secret access key (prefer environment variables in CI/CD)"
+  type        = string
+  sensitive   = true
+  default     = null
+}
+
+variable "aws_session_token" {
+  description = "Optional AWS session token for temporary credentials"
+  type        = string
+  sensitive   = true
+  default     = null
+}
+
 variable "environment" {
   description = "Deployment environment name (dev/prod)"
   type        = string
