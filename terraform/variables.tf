@@ -1,41 +1,49 @@
 variable "aws_region" {
   description = "AWS region for all resources"
   type        = string
+  default     = "us-east-1"
 }
 
 variable "environment" {
   description = "Deployment environment name (dev/prod)"
   type        = string
+  default     = "dev"
 }
 
 variable "project" {
   description = "Project name used in tags and naming"
   type        = string
+  default     = "task-manager"
 }
 
 variable "owner" {
   description = "Owner/team for operational ownership"
   type        = string
+  default     = "platform-team"
 }
 
 variable "vpc_cidr" {
   description = "CIDR block for the VPC"
   type        = string
+  default     = "10.10.0.0/16"
 }
 
 variable "public_subnet_cidrs" {
   description = "CIDR blocks for public subnets"
   type        = list(string)
+  default     = ["10.10.1.0/24", "10.10.2.0/24"]
 }
 
 variable "private_subnet_cidrs" {
   description = "CIDR blocks for private subnets"
   type        = list(string)
+  default     = ["10.10.11.0/24", "10.10.12.0/24"]
 }
 
 variable "availability_zones" {
   description = "Availability zones for subnets"
   type        = list(string)
+  default     = ["us-east-1a", "us-east-1b"]
 }
 
 variable "ec2_instance_type" {
@@ -65,17 +73,20 @@ variable "backend_app_port" {
 variable "db_name" {
   description = "RDS MySQL database name"
   type        = string
+  default     = "taskdb"
 }
 
 variable "db_username" {
   description = "Master username for RDS"
   type        = string
+  default     = "task_admin"
 }
 
 variable "db_password" {
   description = "Master password for RDS (set via tfvars/env var)"
   type        = string
   sensitive   = true
+  default     = "CHANGE_ME_PASSWORD"
 }
 
 variable "db_allocated_storage" {
@@ -111,14 +122,17 @@ variable "db_deletion_protection" {
 variable "frontend_bucket_name" {
   description = "Globally unique S3 bucket name for frontend assets"
   type        = string
+  default     = "task-manager-dev-frontend-change-me"
 }
 
 variable "state_bucket_name" {
   description = "S3 bucket name for Terraform remote state"
   type        = string
+  default     = "task-manager-dev-tf-state-change-me"
 }
 
 variable "state_lock_table_name" {
   description = "DynamoDB table name for Terraform state locking"
   type        = string
+  default     = "task-manager-dev-tf-lock"
 }
