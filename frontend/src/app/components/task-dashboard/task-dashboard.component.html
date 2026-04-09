@@ -1,0 +1,54 @@
+<div class="dashboard-container">
+  <div class="header">
+    <div class="title-section">
+      <h1>My Tasks</h1>
+      <p class="subtitle">Manage and track your goals</p>
+    </div>
+    <a routerLink="/task/new" class="btn-primary">
+      <span class="icon">+</span> New Task
+    </a>
+  </div>
+
+  <div class="contentArea">
+    <div *ngIf="loading" class="loader">
+      <div class="spinner"></div>
+      <p>Loading tasks...</p>
+    </div>
+
+    <div *ngIf="!loading && tasks.length === 0" class="empty-state">
+      <img src="https://assets.ubuntu.com/v1/41666cb6-empty-state.svg" alt="Empty" />
+      <h3>No tasks found</h3>
+      <p>You haven't created any tasks yet.</p>
+      <a routerLink="/task/new" class="btn-primary">Create Your First Task</a>
+    </div>
+
+    <div class="task-grid" *ngIf="!loading && tasks.length > 0">
+      <div class="task-card" *ngFor="let task of tasks">
+        <div class="card-header">
+          <span class="status-pill" [ngClass]="getStatusClass(task.status)">
+            {{ task.status || 'To Do' }}
+          </span>
+          <span class="priority-dot" [ngClass]="getPriorityClass(task.priority)" title="{{ task.priority || 'Low' }} priority"></span>
+        </div>
+        
+        <h3 class="task-title">{{ task.title }}</h3>
+        
+        <div class="task-meta">
+          <div class="meta-item" *ngIf="task.due_date">
+            <svg viewBox="0 0 24 24" class="icon-svg"><path d="M19,4H18V2H16V4H8V2H6V4H5C3.89,4 3.01,4.9 3.01,6L3,20A2,2 0 0,0 5,22H19A2,2 0 0,0 21,20V6A2,2 0 0,0 19,4M19,20H5V10H19V20M19,8H5V6H19V8M9,14H7V12H9V14M13,14H11V12H13V14M17,14H15V12H17V14M9,18H7V16H9V18M13,18H11V16H13V18M17,18H15V16H17V18Z" fill="currentColor"/></svg>
+            <span>{{ formatDate(task.due_date) | date:'mediumDate' }}</span>
+          </div>
+        </div>
+
+        <div class="card-actions">
+          <a [routerLink]="['/task', task.id]" class="btn-icon edit-btn" title="Edit">
+            <svg viewBox="0 0 24 24"><path d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z" fill="currentColor"/></svg>
+          </a>
+          <button (click)="deleteTask(task.id)" class="btn-icon delete-btn" title="Delete">
+            <svg viewBox="0 0 24 24"><path d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" fill="currentColor"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

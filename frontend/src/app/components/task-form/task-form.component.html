@@ -1,0 +1,76 @@
+<div class="form-container">
+  <div class="form-card">
+    <div class="form-header">
+      <a routerLink="/" class="back-link">
+        <svg viewBox="0 0 24 24" class="icon-svg"><path d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z" fill="currentColor"/></svg>
+        Back to Dashboard
+      </a>
+      <h2>{{ isEditMode ? 'Edit Task' : 'Create New Task' }}</h2>
+      <p class="subtitle">{{ isEditMode ? 'Update your task details' : 'Add a new objective to your list' }}</p>
+    </div>
+
+    <div *ngIf="loading" class="loader">
+      <div class="spinner"></div>
+    </div>
+
+    <form *ngIf="!loading" [formGroup]="taskForm" (ngSubmit)="onSubmit()" class="task-form">
+      
+      <div class="form-group">
+        <label for="title">Task Title</label>
+        <input 
+          type="text" 
+          id="title" 
+          formControlName="title" 
+          placeholder="e.g. Finish quarterly report"
+          [class.is-invalid]="taskForm.get('title')?.invalid && taskForm.get('title')?.touched"
+        />
+        <div class="error-msg" *ngIf="taskForm.get('title')?.invalid && taskForm.get('title')?.touched">
+          Title is required (min 3 characters).
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group half">
+          <label for="status">Status</label>
+          <div class="select-wrapper">
+            <select id="status" formControlName="status">
+              <option value="To Do">To Do</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Completed">Completed</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group half">
+          <label for="priority">Priority</label>
+          <div class="select-wrapper">
+            <select id="priority" formControlName="priority">
+              <option value="Low">Low</option>
+              <option value="Medium">Medium</option>
+              <option value="High">High</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="dueDateInput">Due Date</label>
+        <input 
+          type="datetime-local" 
+          id="dueDateInput" 
+          formControlName="dueDateInput"
+        />
+        <small class="help-text">Optional. Select a deadline for this task.</small>
+      </div>
+
+      <div class="form-actions">
+        <a routerLink="/" class="btn-secondary">Cancel</a>
+        <button type="submit" class="btn-primary" [disabled]="taskForm.invalid || submitting">
+          <span *ngIf="submitting" class="spinner-small"></span>
+          {{  isEditMode ? 'Save Changes' : 'Create Task' }}
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>
